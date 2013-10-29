@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<title>SCORM 1.2 LMS Diagnostic SCO</title>
+<script type="text/javascript" src="js/APIWrapper.js"></script>
+<script type="text/javascript" src="js/ostynscormtime.js"></script>
+<script type="text/javascript" src="js/lmsdiag.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
+<link rel="stylesheet" href="css/styles.css" type="text/css" media="screen" />
+<body>
+<div id="container">
+	<div id="header">
+		<h1>SCORM 1.2 LMS Diagnostic SCO</h1>
+		<div id="desc">A (Very) Simple Diagnostic SCO (For use with a SCORM1.2-conformant RTE)</div>
+	</div>
+	<div id="links">
+		<b><a href="#" onclick="diag.terminate();terminated=true;return false;">Terminate SCO</a></b> | <b><a href="#" onclick="diag.commit();return false;">Commit SCO data</a></b> | <b><a href="#" onclick="clearConsle();return false;">Clear Console</a></b>
+	</div>
+	<fieldset>
+		<legend>Session controls</legend>
+		<div class="instructions">Set Generic Values: Sends predefined SCORM data to the LMS</div>
+		<ul>
+			<li><a href="#" onclick="diag.setLocation('page001');return false;">Set location</a> (to &quot;page001&quot;)</li>
+			<li>Set lesson status</li>
+			<ul>
+				<li><a href="#" onclick="diag.setStatus('incomplete');return false;">incomplete</a></li>
+				<li><a href="#" onclick="diag.setStatus('completed');return false;">completed</a></li>
+				<li><a href="#" onclick="diag.setStatus('passed');return false;">passed</a></li>
+				<li><a href="#" onclick="diag.setStatus('failed');return false;">failed</a></li>
+			</ul>
+			<li>Set score</li>
+			<ul>
+				<li><a href="#" onclick="diag.setScore(100);return false;">100</a></li>
+				<li><a href="#" onclick="diag.setScore(85);return false;">85</a></li>
+				<li><a href="#" onclick="diag.setScore(50);return false;">50</a></li>
+			</ul>
+			<li><a href="#" onclick="diag.setSessionTime();return false;">Set session time</a> (to <span id="elapsedTime"></span>)</li>
+			<li><a href="#" onclick="diag.setSuspendData('someVar=1,anotherVar=2');return false;">Set values in suspend data</a> (to &quot;someVar=1,anotherVar=2&quot;)</li>
+		</ul>
+		<div class="instructions">Set Custom Value: Sends custom key/value SCORM data to the LMS</div>
+		<ul>
+			<li>
+				Set <input type="text" id="customElKey" value="cmi.core.entry"> to <input type="text" id="customElVal" value="ab-inito"> <a href="#" onclick="setCustomValue();return false;">Submit</a>
+			</li>
+		</ul>
+		<div class="instructions">Get Values: Retrieves the SCORM data values from the LMS set in a previous session</div>
+		<ul>
+			<li><a href="#" onclick="diag.getLocation();return false;">Get lesson location</a></li>
+			<li><a href="#" onclick="diag.getStatus();return false;">Get lesson status</a></li>
+			<li><a href="#" onclick="diag.getScore();return false;">Get score</a></li>
+			<li><a href="#" onclick="diag.getSuspendData();return false;">Get suspend data</a></li>
+		</ul>
+	</fieldset>
+	<fieldset>
+		<legend>Event Log</legend>
+		<div id="debug">&nbsp;</div>
+	</fieldset>
+	<div id="copy" class="alignRight">SCORM 1.2 LMS Diagnostic SCO - &copy;2011 Sean K. Friese</div>
+</div>
+</body>
+</html>
