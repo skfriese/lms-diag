@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <title>SCORM 1.2 LMS Diagnostic SCO</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/styles.css" type="text/css" media="screen" />
+</head>
+<body>
+
+  <div class="container">
+
+    <h1>SCORM 1.2 LMS Diagnostic SCO</h1>
+
+    <div class="actions">
+      <a class="btn btn-success" role="button" href="javascript:void(0);" data-click="initialize">LMSInitialize</a>
+      <a class="btn btn-primary" role="button" href="javascript:void(0);" data-click="commit">LMSCommit</a>
+      <a class="btn btn-warning" role="button" href="javascript:void(0);" data-click="terminate">LMSFinish</a>
+      <a class="btn btn-danger" role="button" href="javascript:void(0);" data-click="closeWin"><b class="fa fa-times"></b> Close SCO Window</a>
+    </div>
+
+    <div id="init-warning" class="alert alert-warning" role="alert">LMSInitialize has not been called. The SCO must be initialized before anything else. You have <span id="init-seconds"></span> seconds remaining.</div>
+
+    <hr />
+
+    <ul class="nav nav-tabs nav-justified" role="tablist">
+      <li role="presentation" class="active">
+        <a href="#set" data-toggle="tab">LMSSetValue</a>
+      </li>
+      <li role="presentation">
+        <a href="#get" data-toggle="tab">LMSGetValue</a>
+      </li>
+      <li role="presentation">
+        <a href="#macro" data-toggle="tab">Macros</a>
+      </li>
+    </ul>
+
+    <div class="tab-content clearfix">
+      <div role="tabpanel" class="tab-pane active fade in" id="set">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="list-group">
+              <div class="list-group-item">
+                cmi.core.lesson_location
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_location" data-val="page001">&quot;page_001&quot;</a>
+              </div>
+
+              <div class="list-group-item">
+                cmi.core.lesson_status
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="incomplete">&quot;incomplete&quot;</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="completed">&quot;completed&quot;</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="passed">&quot;passed&quot;</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="failed">&quot;failed&quot;</a>
+              </div>
+
+              <div class="list-group-item">
+                cmi.core.score.raw 
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="0">0</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="25">25</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="50">50</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="75">75</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="100">100</a>
+              </div>
+
+              <div class="list-group-item">
+                cmi.core.session_time
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setSessionTime">&quot;<span id="elapsedTime"></span>&quot;</a>
+              </div>
+              <div class="list-group-item">
+                cmi.suspend_data
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.suspend_data" data-val="someVar=1,anotherVar=2">&quot;someVar=1,anotherVar=2&quot;</a>
+              </div>
+
+              <div class="list-group-item">
+                <form class="form-inline">
+                  <div class="form-group">
+                    Set <input type="text" class="form-control" id="set-custom-key"> to 
+                    <input type="text" class="form-control" id="set-custom-value"> 
+                    <a class="btn btn-default" href="javascript:void(0);" data-click="setCustomValue">Send</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div role="tabpanel" class="tab-pane fade" id="get">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="list-group">
+              <a href="javascript:void(0);" class="list-group-item" data-click="getValue" data-key="cmi.core.lesson_location">cmi.core.lesson_location</a>
+              <a href="javascript:void(0);" class="list-group-item" data-click="getValue" data-key="cmi.core.lesson_status">cmi.core.lesson_status</a>
+              <a href="javascript:void(0);" class="list-group-item" data-click="getValue" data-key="cmi.core.score.raw">cmi.core.score.raw</a>
+              <a href="javascript:void(0);" class="list-group-item" data-click="getValue" data-key="cmi.suspend_data">cmi.suspend_data</a>
+              <a href="javascript:void(0);" class="list-group-item" data-click="getAll">Get everything possible</a>
+              
+              <div class="list-group-item">
+                <form class="form-inline">
+                  <div class="form-group">
+                    Get <input type="text" class="form-control" id="get-custom-key">  
+                    <a class="btn btn-default" href="javascript:void(0);" data-click="getCustomValue">Send</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div role="tabpanel" class="tab-pane fade" id="macro">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <form class="form-inline">
+              <div class="form-group">
+                <label for="macros">Macros</label>
+                <select id="macros" class="form-control" size="5"></select>
+                <a class="btn btn-default" href="javascript:void(0);" data-click="runMacro">Run</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Logs</h3>
+      </div>
+      <div class="panel-body">
+        <div class="btn-group actions" role="group">
+          <a  class="btn btn-danger" role="button" href="javascript:void(0);" data-click="clearConsole"><b class="fa fa-eraser"></b> Clear Logs</a>
+        </div>
+        <pre id="logs"><ul></ul></pre>
+      </div>
+    </div>
+
+    <hr />
+
+    <footer>
+      <p>SCORM 1.2 LMS Diagnostic SCO &raquo; <a href="https://github.com/skfriese/lms-diag">https://github.com/skfriese/lms-diag</a></p>
+    </footer>
+  </div> <!-- /container -->
+
+  <script type="text/javascript" src="js/lib/APIWrapper.js"></script>
+  <script type="text/javascript" src="js/lib/ostynscormtime.js"></script>
+  <script type="text/javascript" src="js/lmsdiag.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+  <script type="text/javascript" src="conf/macros.js"></script>
+
+</body>
+</html>
