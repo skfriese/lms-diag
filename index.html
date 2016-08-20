@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <title>SCORM 1.2 LMS Diagnostic SCO</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/styles.css" type="text/css" media="screen" />
+</head>
+<body>
+
+  <div class="container">
+
+    <h1>SCORM 1.2 LMS Diagnostic SCO <br /><small>A (Very) Simple Diagnostic SCO (For use with a SCORM1.2-conformant RTE)</small></h1>
+
+    <div class="btn-group actions" role="group">
+      <a class="btn btn-default" role="button" href="javascript:void(0);" data-click="initialize">LMSInitialize()</a>
+      <a class="btn btn-default" role="button" href="javascript:void(0);" data-click="commit">LMSCommit()</a>
+      <a class="btn btn-default" role="button" href="javascript:void(0);" data-click="terminate">LMSFinish()</a>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Set Value</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+          <li><a href="javascript:void(0);" data-click="setLocation" data-val="page001">Set location</a> (to &quot;page001&quot;)</li>
+          <li>Set lesson status
+            <ul>
+              <li><a href="javascript:void(0);" data-click="setStatus" data-val="incomplete">incomplete</a></li>
+              <li><a href="javascript:void(0);" data-click="setStatus" data-val="completed">completed</a></li>
+              <li><a href="javascript:void(0);" data-click="setStatus" data-val="passed">passed</a></li>
+              <li><a href="javascript:void(0);" data-click="setStatus" data-val="failed">failed</a></li>
+            </ul>
+          </li>
+          <li>Set score</li>
+          <ul>
+            <li><a href="javascript:void(0);" data-click="setScore" data-val="100">100</a></li>
+            <li><a href="javascript:void(0);" data-click="setScore" data-val="85">85</a></li>
+            <li><a href="javascript:void(0);" data-click="setScore" data-val="50">50</a></li>
+          </ul>
+          <li><a href="javascript:void(0);" data-click="setSessionTime">Set session time</a> (to <span id="elapsedTime"></span>)</li>
+          <li><a href="javascript:void(0);" data-click="setSuspendData" data-val="someVar=1,anotherVar=2">Set values in suspend data</a> (to &quot;someVar=1,anotherVar=2&quot;)</li>
+        </ul>
+        <div class="instructions">Set Custom Value: Sends custom key/value SCORM data to the LMS</div>
+        <ul>
+          <li>
+            Set <input type="text" id="customElKey" value="cmi.core.entry"> to <input type="text" id="customElVal" value="ab-inito"> <a href="javascript:void(0);" data-click="setCustomValue">Submit</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Get Value</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+          <li><a href="javascript:void(0);" data-click="getLocation">lesson_location</a></li>
+          <li><a href="javascript:void(0);" data-click="getStatus">lesson_status</a></li>
+          <li><a href="javascript:void(0);" data-click="getScore">score</a></li>
+          <li><a href="javascript:void(0);" data-click="getSuspendData">suspend_data</a></li>
+          <li><a href="javascript:void(0);" data-click="getAll">all</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Logs</h3>
+      </div>
+      <div class="panel-body">
+        <div class="btn-group actions" role="group">
+          <a  class="btn btn-warning" role="button" href="javascript:void(0);" data-click="clearConsole">Clear Logs</a>
+        </div>
+        <pre id="logs"></pre>
+      </div>
+    </div>
+
+    <hr>
+
+    <footer>
+      <p>SCORM 1.2 LMS Diagnostic SCO <a href="https://github.com/skfriese/lms-diag">https://github.com/skfriese/lms-diag</a></p>
+    </footer>
+  </div> <!-- /container -->
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="js/APIWrapper.js"></script>
+  <script type="text/javascript" src="js/ostynscormtime.js"></script>
+  <script type="text/javascript" src="js/lmsdiag.js"></script>
+  <script type="text/javascript" src="js/utils.js"></script>
+
+</body>
+</html>

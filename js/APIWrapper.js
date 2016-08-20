@@ -96,7 +96,7 @@ function doLMSInitialize()
    var api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSInitialize was not successful.");
+      diag.log("Unable to locate the LMS's API Implementation. LMSInitialize was not successful.",'text-danger');
       return "false";
    }
 
@@ -127,7 +127,7 @@ function doLMSFinish()
    var api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSFinish was not successful.");
+      diag.log("Unable to locate the LMS's API Implementation. LMSFinish was not successful.",'text-danger');
       return "false";
    }
    else
@@ -163,7 +163,7 @@ function doLMSGetValue(name)
    var api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSGetValue was not successful.");
+      diag.log("Unable to locate the LMS's API Implementation. LMSGetValue was not successful.",'text-danger');
       return "";
    }
    else
@@ -174,7 +174,7 @@ function doLMSGetValue(name)
       {
          // an error was encountered so display the error description
          var errDescription = api.LMSGetErrorString(errCode);
-         log("LMSGetValue("+name+") failed. \n"+ errDescription);
+         diag.log("LMSGetValue("+name+") failed.  "+ errDescription,'text-danger');
          return "";
       }
       else
@@ -202,7 +202,7 @@ function doLMSSetValue(name, value)
    var api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSSetValue was not successful.");
+      diag.log("Unable to locate the LMS's API Implementation. LMSSetValue was not successful.",'text-danger');
       return;
    }
    else
@@ -232,7 +232,7 @@ function doLMSCommit()
    var api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSCommit was not successful.");
+      diag.log("Unable to locate the LMS's API Implementation. LMSCommit was not successful.",'text-danger');
       return "false";
    }
    else
@@ -262,7 +262,7 @@ function doLMSGetLastError()
    var api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSGetLastError was not successful.");
+      diag.log("Unable to locate the LMS's API Implementation. LMSGetLastError was not successful.",'text-danger');
       //since we can't get the error code from the LMS, return a general error
       return _GeneralError;
    }
@@ -285,7 +285,7 @@ function doLMSGetErrorString(errorCode)
    var api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSGetErrorString was not successful.");
+      diag.log("Unable to locate the LMS's API Implementation. LMSGetErrorString was not successful.",'text-danger');
    }
 
    return api.LMSGetErrorString(errorCode).toString();
@@ -307,7 +307,7 @@ function doLMSGetDiagnostic(errorCode)
    var api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSGetDiagnostic was not successful.");
+      diag.log("Unable to locate the LMS's API Implementation. LMSGetDiagnostic was not successful.",'text-danger');
    }
 
    return api.LMSGetDiagnostic(errorCode).toString();
@@ -332,7 +332,7 @@ function LMSIsInitialized()
    var api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSIsInitialized() failed.");
+      diag.log("Unable to locate the LMS's API Implementation. LMSIsInitialized() failed.",'text-danger');
       return false;
    }
    else
@@ -367,7 +367,7 @@ function ErrorHandler()
    var api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nCannot determine LMS error code.");
+      diag.log("Unable to locate the LMS's API Implementation. Cannot determine LMS error code.",'text-danger');
       return;
    }
 
@@ -386,7 +386,7 @@ function ErrorHandler()
          // on the previous error.
       }
 
-      log(errDescription);
+      diag.log(errDescription,'text-danger');
    }
 
    return errCode;
@@ -432,7 +432,7 @@ function findAPI(win)
       // Note: 7 is an arbitrary number, but should be more than sufficient
       if (findAPITries > 7) 
       {
-         log("Error finding API -- too deeply nested.");
+         diag.log("Error finding API -- too deeply nested.",'text-danger');
          return null;
       }
       
@@ -465,7 +465,7 @@ function getAPI()
    }
    if (theAPI == null)
    {
-      log("Unable to find an API adapter");
+      diag.log("Unable to find an API adapter",'text-danger');
    }
    return theAPI
 }

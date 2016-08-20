@@ -10,8 +10,8 @@
 	</organization>
 </organizations>
 <resources>
-	<resource identifier="SCO1" type="webcontent" adlcp:scormtype="sco" href="default.htm">
-		<file href="default.htm" />
+	<resource identifier="SCO1" type="webcontent" adlcp:scormtype="sco" href="index.html">
+		<file href="index.html" />
 	</resource>
 </resources>
 </manifest>

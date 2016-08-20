@@ -1,23 +1,17 @@
-body{margin:10px;background:#f0f0f0;}
-h1{font-family:verdana,arial,helvetica,geneva;font-size:16px;margin:0 0 10px 0;}
-a,div,p{font-family:verdana,arial,helvetica,geneva;font-size:12px;}
-a,a:hover,a:link,a:visited{color:#3A95C5;text-decoration:none;}
-a:hover{text-decoration:underline;}
-div#container{border:1px solid #ccc;padding:10px;background:#fff;}
-div#header{background:#fff7ea;border:1px solid #f60;padding:5px;}
-div#header h1,div#header div{color:#f60;}
-div#links{margin:10px 0 10px 0;padding:5px;border:1px solid #3A95C5;background:#EBF4FA;color:#97C6E6;}
-.inline{display:inline-block;}
-div#debug{background:#333;border:4px solid #666;height:300px;overflow:auto;margin:5px;}
-div.entry,div.error,div.info{font-family:consolas,"courier new",courier,fixed;margin:2px;}
-div.entry{color:#9c0;}
-div.info{color:#ccc;}
-div.error{color:#f66;}
-div#copy{margin:20px 0 10px 0;color:#666;}
-div#copy, div#copy a{font-size:10px;}
-.alignLeft{float:left;}
-.alignRight{float:right;}
-div.instructions{font-size:11px;color:#666;margin:10px 0 0 0;border-bottom:1px solid #ccc;}
-input[type=text]{border:2px solid #ccc;}
-input[type=text]:hover{border:2px solid #97C6E6;}
-input[type=text]:focus{border:2px solid #3A95C5;}
+
+.actions
+{
+  margin:0 0 1em 0;
+}
+
+#logs
+{
+  height:300px;
+  padding:1em;
+  overflow:auto;
+}
+
+small
+{
+  font-color:#999;
+}
