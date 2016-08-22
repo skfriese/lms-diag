@@ -22,3 +22,15 @@ small
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+#logs ul
+{
+  list-style: none;
+  margin:0;
+  padding:0;
+}
+
+#logs ul li:before
+{
+  content: "\00BB \0020";
+}

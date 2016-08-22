@@ -20,6 +20,8 @@
       <a class="btn btn-danger" role="button" href="javascript:void(0);" data-click="closeWin"><b class="fa fa-times"></b> Close SCO Window</a>
     </div>
 
+    <div id="init-warning" class="alert alert-warning" role="alert">LMSInitialize has not been called. The SCO must be initialized before anything else. You have <span id="init-seconds"></span> seconds remaining.</div>
+
     <hr />
 
     <ul class="nav nav-tabs nav-justified" role="tablist">
@@ -39,23 +41,25 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <ul>
-              <li><a href="javascript:void(0);" data-click="setLocation" data-val="page001">Set location</a> (to &quot;page001&quot;)</li>
+              <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.lesson_location" data-val="page001">Set location</a> (to &quot;page001&quot;)</li>
               <li>Set lesson status
                 <ul>
-                  <li><a href="javascript:void(0);" data-click="setStatus" data-val="incomplete">incomplete</a></li>
-                  <li><a href="javascript:void(0);" data-click="setStatus" data-val="completed">completed</a></li>
-                  <li><a href="javascript:void(0);" data-click="setStatus" data-val="passed">passed</a></li>
-                  <li><a href="javascript:void(0);" data-click="setStatus" data-val="failed">failed</a></li>
+                  <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.lesson_status" data-val="incomplete">incomplete</a></li>
+                  <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.lesson_status" data-val="completed">completed</a></li>
+                  <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.lesson_status" data-val="passed">passed</a></li>
+                  <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.lesson_status" data-val="failed">failed</a></li>
                 </ul>
               </li>
               <li>Set score</li>
               <ul>
-                <li><a href="javascript:void(0);" data-click="setScore" data-val="100">100</a></li>
-                <li><a href="javascript:void(0);" data-click="setScore" data-val="85">85</a></li>
-                <li><a href="javascript:void(0);" data-click="setScore" data-val="50">50</a></li>
+                <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.score.raw" data-val="100">100</a></li>
+                <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.score.raw" data-val="75">75</a></li>
+                <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.score.raw" data-val="50">50</a></li>
+                <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.score.raw" data-val="25">25</a></li>
+                <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.score.raw" data-val="0">0</a></li>
               </ul>
               <li><a href="javascript:void(0);" data-click="setSessionTime">Set session time</a> (to <span id="elapsedTime"></span>)</li>
-              <li><a href="javascript:void(0);" data-click="setSuspendData" data-val="someVar=1,anotherVar=2">Set values in suspend data</a> (to &quot;someVar=1,anotherVar=2&quot;)</li>
+              <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.suspend_data" data-val="someVar=1,anotherVar=2">Set values in suspend data</a> (to &quot;someVar=1,anotherVar=2&quot;)</li>
             </ul>
             <div class="instructions">Set Custom Value: Sends a specific value to the LMS</div>
             <form class="form-inline">
@@ -73,10 +77,10 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <ul>
-              <li><a href="javascript:void(0);" data-click="getLocation">lesson_location</a></li>
-              <li><a href="javascript:void(0);" data-click="getStatus">lesson_status</a></li>
-              <li><a href="javascript:void(0);" data-click="getScore">score</a></li>
-              <li><a href="javascript:void(0);" data-click="getSuspendData">suspend_data</a></li>
+              <li><a href="javascript:void(0);" data-click="getValue" data-key="cmi.core.lesson_location">lesson_location</a></li>
+              <li><a href="javascript:void(0);" data-click="getValue" data-key="cmi.core.lesson_status">lesson_status</a></li>
+              <li><a href="javascript:void(0);" data-click="getValue" data-key="cmi.core.score.raw">score</a></li>
+              <li><a href="javascript:void(0);" data-click="getValue" data-key="cmi.suspend_data">suspend_data</a></li>
               <li><a href="javascript:void(0);" data-click="getAll">all</a></li>
             </ul>
             <div class="instructions">Get Custom Value: Retrieve a specific value from the LMS</div>
@@ -96,7 +100,7 @@
             <form class="form-inline">
               <div class="form-group">
                 <label for="macros">Macros</label>
-                <select id="macros" class="form-control">
+                <select id="macros" class="form-control" size="10">
                 </select>
                 <a class="btn btn-default" href="javascript:void(0);" data-click="runMacro">Run</a>
               </div>
@@ -114,7 +118,7 @@
         <div class="btn-group actions" role="group">
           <a  class="btn btn-danger" role="button" href="javascript:void(0);" data-click="clearConsole"><b class="fa fa-eraser"></b> Clear Logs</a>
         </div>
-        <pre id="logs"></pre>
+        <pre id="logs"><ul></ul></pre>
       </div>
     </div>
 

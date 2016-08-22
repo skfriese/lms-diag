@@ -55,8 +55,10 @@
 **
 *******************************************************************************/
 
+// Updated by Sean K. Friese for LMSDiag - https://github.com/skfriese/lms-diag
+
 var _Debug = true;  // set this to false to turn debugging off
-                     // and get rid of those annoying alert boxes.
+                    // and get rid of those annoying alert boxes.
 
 // Define exception/error codes
 var _NoError = 0;
@@ -96,7 +98,7 @@ function doLMSInitialize()
    var api = getAPIHandle();
    if (api == null)
    {
-      diag.log("Unable to locate the LMS's API Implementation. LMSInitialize was not successful.",'text-danger');
+      noAPI("doLMSInitialize");
       return "false";
    }
 
@@ -105,8 +107,13 @@ function doLMSInitialize()
    if (result.toString() != "true")
    {
       var err = ErrorHandler();
+      diag.log('doLMSInitialize was not successful: ' + err,'text-danger');
    }
-
+   else
+   {
+      diag.log('doLMSInitialize executed successfully');
+   }
+   
    return result.toString();
 }
 
@@ -127,7 +134,7 @@ function doLMSFinish()
    var api = getAPIHandle();
    if (api == null)
    {
-      diag.log("Unable to locate the LMS's API Implementation. LMSFinish was not successful.",'text-danger');
+      noAPI("doLMSFinish");
       return "false";
    }
    else
@@ -138,6 +145,11 @@ function doLMSFinish()
       if (result.toString() != "true")
       {
          var err = ErrorHandler();
+         diag.log('doLMSFinish was not successful: ' + err,'text-danger');
+      }
+      else
+      {
+         diag.log('doLMSFinish executed successfully');
       }
 
    }
@@ -163,7 +175,7 @@ function doLMSGetValue(name)
    var api = getAPIHandle();
    if (api == null)
    {
-      diag.log("Unable to locate the LMS's API Implementation. LMSGetValue was not successful.",'text-danger');
+      noAPI("doLMSGetValue");
       return "";
    }
    else
@@ -174,12 +186,12 @@ function doLMSGetValue(name)
       {
          // an error was encountered so display the error description
          var errDescription = api.LMSGetErrorString(errCode);
-         diag.log("LMSGetValue("+name+") failed.  "+ errDescription,'text-danger');
+         diag.log("doLMSGetValue("+name+") failed.  "+ errDescription,'text-danger');
          return "";
       }
       else
       {
-         
+         diag.log('doLMSGetValue: '+name+' executed successfully (Received &quot;'+value+'&quot;)');
          return value.toString();
       }
    }
@@ -202,7 +214,7 @@ function doLMSSetValue(name, value)
    var api = getAPIHandle();
    if (api == null)
    {
-      diag.log("Unable to locate the LMS's API Implementation. LMSSetValue was not successful.",'text-danger');
+      noAPI("doLMSSetValue");
       return;
    }
    else
@@ -211,6 +223,11 @@ function doLMSSetValue(name, value)
       if (result.toString() != "true")
       {
          var err = ErrorHandler();
+         diag.log('doLMSSetValue: '+name+' was not successful: ' + err,'text-danger');
+      }
+      else
+      {
+         diag.log('doLMSSetValue: '+name+' executed successfully (Sent &quot;'+value+'&quot;)');
       }
    }
 
@@ -232,7 +249,7 @@ function doLMSCommit()
    var api = getAPIHandle();
    if (api == null)
    {
-      diag.log("Unable to locate the LMS's API Implementation. LMSCommit was not successful.",'text-danger');
+      noAPI("doLMSCommit");
       return "false";
    }
    else
@@ -241,6 +258,11 @@ function doLMSCommit()
       if (result != "true")
       {
          var err = ErrorHandler();
+         diag.log('doLMSCommit was not successful: ' + err,'text-danger');
+      }
+      else
+      {
+         diag.log('doLMSCommit executed successfully');
       }
    }
 
@@ -262,7 +284,7 @@ function doLMSGetLastError()
    var api = getAPIHandle();
    if (api == null)
    {
-      diag.log("Unable to locate the LMS's API Implementation. LMSGetLastError was not successful.",'text-danger');
+      noAPI("doLMSGetLastError");
       //since we can't get the error code from the LMS, return a general error
       return _GeneralError;
    }
@@ -285,7 +307,7 @@ function doLMSGetErrorString(errorCode)
    var api = getAPIHandle();
    if (api == null)
    {
-      diag.log("Unable to locate the LMS's API Implementation. LMSGetErrorString was not successful.",'text-danger');
+      noAPI("doLMSGetErrorString");
    }
 
    return api.LMSGetErrorString(errorCode).toString();
@@ -307,7 +329,7 @@ function doLMSGetDiagnostic(errorCode)
    var api = getAPIHandle();
    if (api == null)
    {
-      diag.log("Unable to locate the LMS's API Implementation. LMSGetDiagnostic was not successful.",'text-danger');
+      noAPI("doLMSGetDiagnostic");
    }
 
    return api.LMSGetDiagnostic(errorCode).toString();
@@ -332,7 +354,7 @@ function LMSIsInitialized()
    var api = getAPIHandle();
    if (api == null)
    {
-      diag.log("Unable to locate the LMS's API Implementation. LMSIsInitialized() failed.",'text-danger');
+      noAPI("LMSIsInitialized");
       return false;
    }
    else
@@ -367,7 +389,7 @@ function ErrorHandler()
    var api = getAPIHandle();
    if (api == null)
    {
-      diag.log("Unable to locate the LMS's API Implementation. Cannot determine LMS error code.",'text-danger');
+      noAPI("ErrorHandler");
       return;
    }
 
@@ -470,4 +492,7 @@ function getAPI()
    return theAPI
 }
 
-
+function noAPI(func)
+{
+   diag.log("Unable to locate the LMS's API Implementation. " + func,'text-danger');
+}

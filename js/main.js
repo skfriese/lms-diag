@@ -21,9 +21,10 @@ var utils;
       catch(e){}
     });
 
-    $("[data-click]").click(function(){
+    $("[data-click]").click(function(e){
+      var key = $(this).data("key");
       var val = $(this).data("val");
-      diag[$(this).data("click")](val);
+      diag[$(this).data("click")](key,val,e);
     });
 
   });
