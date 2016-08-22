@@ -15,3 +15,10 @@ small
 {
   font-color:#999;
 }
+
+.tab-pane .panel
+{
+  border-top: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

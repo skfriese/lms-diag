@@ -8,6 +8,7 @@ var utils;
   $(document).ready(function(){
 
     diag = new LMSDiag();
+    $('.nav-tabs').tab();
 
     $(window).on("unload", function(){
       if(diag.terminated){return;}

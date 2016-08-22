@@ -1,4 +1,3 @@
-
 /**
  * LMSDiag Class
  * @Developer Sean K. Friese (skfriese@gmail.com)
@@ -15,7 +14,7 @@ var LMSDiag = (function($)
     'cmi.comments_from_lms',
     'cmi.core',
     'cmi.objectives',
-    'cmi.student_data',
+    'cmi.suspend_data',
     'cmi.student_preference',
     'cmi.interactions'
   ];
@@ -50,6 +49,7 @@ var LMSDiag = (function($)
     this.startTime = '';
     this.version = 'v2.0_20160819';
     this.log('Instance of LMS Diagnostic class created ('+this.version+')');
+    this.populateMacros();
     this.setElapsedTime();
   };
 
@@ -276,6 +276,20 @@ var LMSDiag = (function($)
       this.getValue(k);
     },
 
+    populateMacros: function()
+    {
+      if(!LMSDiagMacros){return;}
+
+      for(var i=0; i<LMSDiagMacros.length;i++)
+      {
+        var macro = LMSDiagMacros[i];
+        $("<option />")
+          .html("Macro "+i)
+          .data("macro",macro)
+          .appendTo($("#macros"));
+      }
+    },
+
     getAll: function()
     {
       for(var i=0;i<_getters.length;i++)
@@ -353,6 +367,14 @@ var LMSDiag = (function($)
         .appendTo($('#logs'));
 
       $('#logs').scrollTop();
+    },
+
+    closeWin: function()
+    {
+      if(top == parent)
+      {
+        top.close();
+      }
     },
 
     toString: function()

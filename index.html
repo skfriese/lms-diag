@@ -11,59 +11,98 @@
 
   <div class="container">
 
-    <h1>SCORM 1.2 LMS Diagnostic SCO <br /><small>A (Very) Simple Diagnostic SCO (For use with a SCORM1.2-conformant RTE)</small></h1>
+    <h1>SCORM 1.2 LMS Diagnostic SCO</h1>
 
-    <div class="btn-group actions" role="group">
-      <a class="btn btn-default" role="button" href="javascript:void(0);" data-click="initialize">LMSInitialize()</a>
-      <a class="btn btn-default" role="button" href="javascript:void(0);" data-click="commit">LMSCommit()</a>
-      <a class="btn btn-default" role="button" href="javascript:void(0);" data-click="terminate">LMSFinish()</a>
+    <div class="actions">
+      <a class="btn btn-success" role="button" href="javascript:void(0);" data-click="initialize">LMSInitialize</a>
+      <a class="btn btn-primary" role="button" href="javascript:void(0);" data-click="commit">LMSCommit</a>
+      <a class="btn btn-warning" role="button" href="javascript:void(0);" data-click="terminate">LMSFinish</a>
+      <a class="btn btn-danger" role="button" href="javascript:void(0);" data-click="closeWin"><b class="fa fa-times"></b> Close SCO Window</a>
     </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Set Value</h3>
-      </div>
-      <div class="panel-body">
-        <ul>
-          <li><a href="javascript:void(0);" data-click="setLocation" data-val="page001">Set location</a> (to &quot;page001&quot;)</li>
-          <li>Set lesson status
+    <hr />
+
+    <ul class="nav nav-tabs nav-justified" role="tablist">
+      <li role="presentation" class="active">
+        <a href="#set" data-toggle="tab">LMSSetValue</a>
+      </li>
+      <li role="presentation">
+        <a href="#get" data-toggle="tab">LMSGetValue</a>
+      </li>
+      <li role="presentation">
+        <a href="#macro" data-toggle="tab">Macros</a>
+      </li>
+    </ul>
+
+    <div class="tab-content clearfix">
+      <div role="tabpanel" class="tab-pane active fade in" id="set">
+        <div class="panel panel-default">
+          <div class="panel-body">
             <ul>
-              <li><a href="javascript:void(0);" data-click="setStatus" data-val="incomplete">incomplete</a></li>
-              <li><a href="javascript:void(0);" data-click="setStatus" data-val="completed">completed</a></li>
-              <li><a href="javascript:void(0);" data-click="setStatus" data-val="passed">passed</a></li>
-              <li><a href="javascript:void(0);" data-click="setStatus" data-val="failed">failed</a></li>
+              <li><a href="javascript:void(0);" data-click="setLocation" data-val="page001">Set location</a> (to &quot;page001&quot;)</li>
+              <li>Set lesson status
+                <ul>
+                  <li><a href="javascript:void(0);" data-click="setStatus" data-val="incomplete">incomplete</a></li>
+                  <li><a href="javascript:void(0);" data-click="setStatus" data-val="completed">completed</a></li>
+                  <li><a href="javascript:void(0);" data-click="setStatus" data-val="passed">passed</a></li>
+                  <li><a href="javascript:void(0);" data-click="setStatus" data-val="failed">failed</a></li>
+                </ul>
+              </li>
+              <li>Set score</li>
+              <ul>
+                <li><a href="javascript:void(0);" data-click="setScore" data-val="100">100</a></li>
+                <li><a href="javascript:void(0);" data-click="setScore" data-val="85">85</a></li>
+                <li><a href="javascript:void(0);" data-click="setScore" data-val="50">50</a></li>
+              </ul>
+              <li><a href="javascript:void(0);" data-click="setSessionTime">Set session time</a> (to <span id="elapsedTime"></span>)</li>
+              <li><a href="javascript:void(0);" data-click="setSuspendData" data-val="someVar=1,anotherVar=2">Set values in suspend data</a> (to &quot;someVar=1,anotherVar=2&quot;)</li>
             </ul>
-          </li>
-          <li>Set score</li>
-          <ul>
-            <li><a href="javascript:void(0);" data-click="setScore" data-val="100">100</a></li>
-            <li><a href="javascript:void(0);" data-click="setScore" data-val="85">85</a></li>
-            <li><a href="javascript:void(0);" data-click="setScore" data-val="50">50</a></li>
-          </ul>
-          <li><a href="javascript:void(0);" data-click="setSessionTime">Set session time</a> (to <span id="elapsedTime"></span>)</li>
-          <li><a href="javascript:void(0);" data-click="setSuspendData" data-val="someVar=1,anotherVar=2">Set values in suspend data</a> (to &quot;someVar=1,anotherVar=2&quot;)</li>
-        </ul>
-        <div class="instructions">Set Custom Value: Sends custom key/value SCORM data to the LMS</div>
-        <ul>
-          <li>
-            Set <input type="text" id="customElKey" value="cmi.core.entry"> to <input type="text" id="customElVal" value="ab-inito"> <a href="javascript:void(0);" data-click="setCustomValue">Submit</a>
-          </li>
-        </ul>
+            <div class="instructions">Set Custom Value: Sends a specific value to the LMS</div>
+            <form class="form-inline">
+              <div class="form-group">
+                Set <input type="text" class="form-control" id="set-custom-key"> to 
+                <input type="text" class="form-control" id="set-custom-value"> 
+                <a class="btn btn-default" href="javascript:void(0);" data-click="setCustomValue">Send</a>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Get Value</h3>
+      <div role="tabpanel" class="tab-pane fade" id="get">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <ul>
+              <li><a href="javascript:void(0);" data-click="getLocation">lesson_location</a></li>
+              <li><a href="javascript:void(0);" data-click="getStatus">lesson_status</a></li>
+              <li><a href="javascript:void(0);" data-click="getScore">score</a></li>
+              <li><a href="javascript:void(0);" data-click="getSuspendData">suspend_data</a></li>
+              <li><a href="javascript:void(0);" data-click="getAll">all</a></li>
+            </ul>
+            <div class="instructions">Get Custom Value: Retrieve a specific value from the LMS</div>
+            <form class="form-inline">
+              <div class="form-group">
+                Get <input type="text" class="form-control" id="get-custom-key">  
+                <a class="btn btn-default" href="javascript:void(0);" data-click="getCustomValue">Send</a>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-      <div class="panel-body">
-        <ul>
-          <li><a href="javascript:void(0);" data-click="getLocation">lesson_location</a></li>
-          <li><a href="javascript:void(0);" data-click="getStatus">lesson_status</a></li>
-          <li><a href="javascript:void(0);" data-click="getScore">score</a></li>
-          <li><a href="javascript:void(0);" data-click="getSuspendData">suspend_data</a></li>
-          <li><a href="javascript:void(0);" data-click="getAll">all</a></li>
-        </ul>
+
+      <div role="tabpanel" class="tab-pane fade" id="macro">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <form class="form-inline">
+              <div class="form-group">
+                <label for="macros">Macros</label>
+                <select id="macros" class="form-control">
+                </select>
+                <a class="btn btn-default" href="javascript:void(0);" data-click="runMacro">Run</a>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -73,26 +112,27 @@
       </div>
       <div class="panel-body">
         <div class="btn-group actions" role="group">
-          <a  class="btn btn-warning" role="button" href="javascript:void(0);" data-click="clearConsole">Clear Logs</a>
+          <a  class="btn btn-danger" role="button" href="javascript:void(0);" data-click="clearConsole"><b class="fa fa-eraser"></b> Clear Logs</a>
         </div>
         <pre id="logs"></pre>
       </div>
     </div>
 
-    <hr>
+    <hr />
 
     <footer>
-      <p>SCORM 1.2 LMS Diagnostic SCO <a href="https://github.com/skfriese/lms-diag">https://github.com/skfriese/lms-diag</a></p>
+      <p>SCORM 1.2 LMS Diagnostic SCO &raquo; <a href="https://github.com/skfriese/lms-diag">https://github.com/skfriese/lms-diag</a></p>
     </footer>
   </div> <!-- /container -->
 
   <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-  <script type="text/javascript" src="js/APIWrapper.js"></script>
-  <script type="text/javascript" src="js/ostynscormtime.js"></script>
+  <script type="text/javascript" src="js/lib/APIWrapper.js"></script>
+  <script type="text/javascript" src="js/lib/ostynscormtime.js"></script>
   <script type="text/javascript" src="js/lmsdiag.js"></script>
-  <script type="text/javascript" src="js/utils.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+  <script type="text/javascript" src="conf/macros.js"></script>
 
 </body>
 </html>
