@@ -103,9 +103,63 @@ var LMSDiagMacros = [
     ]
   },
 
-  // 1
+  // 2
   {
     label: "Gets and sets some values, fails SCO with score",
+    steps: [
+      {
+        type: "get",
+        key: "cmi.core.lesson_status"
+      },
+      {
+        type: "set",
+        key: "cmi.core.lesson_status",
+        val: "incomplete"
+      },
+      {
+        type: "get",
+        key: "cmi.suspend_data"
+      },
+      {
+        type: "set",
+        key: "cmi.suspend_data",
+        val: "test789"
+      },
+      {
+        type: "get",
+        key: "cmi.core.lesson_location"
+      },
+      {
+        type: "set",
+        key: "cmi.core.score.min",
+        val: 0
+      },
+      {
+        type: "set",
+        key: "cmi.core.score.max",
+        val: 100
+      },
+      {
+        type: "set",
+        key: "cmi.core.score.raw",
+        val: 45
+      },
+      {
+        type: "set",
+        key: "cmi.core.lesson_status",
+        val: "failed"
+      },
+      {
+        type: "set",
+        key: "cmi.core.session_time",
+        val: function(){ return diag.getElapsedTime(); }
+      }
+    ]
+  },
+
+  // 3
+  {
+    label: "Sets interaction data, passes SCO with score",
     steps: [
       {
         type: "get",
