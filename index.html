@@ -40,35 +40,48 @@
       <div role="tabpanel" class="tab-pane active fade in" id="set">
         <div class="panel panel-default">
           <div class="panel-body">
-            <ul>
-              <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.lesson_location" data-val="page001">Set location</a> (to &quot;page001&quot;)</li>
-              <li>Set lesson status
-                <ul>
-                  <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.lesson_status" data-val="incomplete">incomplete</a></li>
-                  <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.lesson_status" data-val="completed">completed</a></li>
-                  <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.lesson_status" data-val="passed">passed</a></li>
-                  <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.lesson_status" data-val="failed">failed</a></li>
-                </ul>
-              </li>
-              <li>Set score</li>
-              <ul>
-                <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.score.raw" data-val="100">100</a></li>
-                <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.score.raw" data-val="75">75</a></li>
-                <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.score.raw" data-val="50">50</a></li>
-                <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.score.raw" data-val="25">25</a></li>
-                <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.core.score.raw" data-val="0">0</a></li>
-              </ul>
-              <li><a href="javascript:void(0);" data-click="setSessionTime">Set session time</a> (to <span id="elapsedTime"></span>)</li>
-              <li><a href="javascript:void(0);" data-click="setValue" data-key="cmi.suspend_data" data-val="someVar=1,anotherVar=2">Set values in suspend data</a> (to &quot;someVar=1,anotherVar=2&quot;)</li>
-            </ul>
-            <div class="instructions">Set Custom Value: Sends a specific value to the LMS</div>
-            <form class="form-inline">
-              <div class="form-group">
-                Set <input type="text" class="form-control" id="set-custom-key"> to 
-                <input type="text" class="form-control" id="set-custom-value"> 
-                <a class="btn btn-default" href="javascript:void(0);" data-click="setCustomValue">Send</a>
+            <div class="list-group">
+              <div class="list-group-item">
+                cmi.core.lesson_location
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_location" data-val="page001">&quot;page_001&quot;</a>
               </div>
-            </form>
+
+              <div class="list-group-item">
+                cmi.core.lesson_status
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="incomplete">&quot;incomplete&quot;</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="completed">&quot;completed&quot;</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="passed">&quot;passed&quot;</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="failed">&quot;failed&quot;</a>
+              </div>
+
+              <div class="list-group-item">
+                cmi.core.score.raw 
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="0">0</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="25">25</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="50">50</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="75">75</a>
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="100">100</a>
+              </div>
+
+              <div class="list-group-item">
+                cmi.core.session_time
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setSessionTime">&quot;<span id="elapsedTime"></span>&quot;</a>
+              </div>
+              <div class="list-group-item">
+                cmi.suspend_data
+                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.suspend_data" data-val="someVar=1,anotherVar=2">&quot;someVar=1,anotherVar=2&quot;</a>
+              </div>
+
+              <div class="list-group-item">
+                <form class="form-inline">
+                  <div class="form-group">
+                    Set <input type="text" class="form-control" id="set-custom-key"> to 
+                    <input type="text" class="form-control" id="set-custom-value"> 
+                    <a class="btn btn-default" href="javascript:void(0);" data-click="setCustomValue">Send</a>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -76,20 +89,22 @@
       <div role="tabpanel" class="tab-pane fade" id="get">
         <div class="panel panel-default">
           <div class="panel-body">
-            <ul>
-              <li><a href="javascript:void(0);" data-click="getValue" data-key="cmi.core.lesson_location">lesson_location</a></li>
-              <li><a href="javascript:void(0);" data-click="getValue" data-key="cmi.core.lesson_status">lesson_status</a></li>
-              <li><a href="javascript:void(0);" data-click="getValue" data-key="cmi.core.score.raw">score</a></li>
-              <li><a href="javascript:void(0);" data-click="getValue" data-key="cmi.suspend_data">suspend_data</a></li>
-              <li><a href="javascript:void(0);" data-click="getAll">all</a></li>
-            </ul>
-            <div class="instructions">Get Custom Value: Retrieve a specific value from the LMS</div>
-            <form class="form-inline">
-              <div class="form-group">
-                Get <input type="text" class="form-control" id="get-custom-key">  
-                <a class="btn btn-default" href="javascript:void(0);" data-click="getCustomValue">Send</a>
+            <div class="list-group">
+              <a href="javascript:void(0);" class="list-group-item" data-click="getValue" data-key="cmi.core.lesson_location">cmi.core.lesson_location</a>
+              <a href="javascript:void(0);" class="list-group-item" data-click="getValue" data-key="cmi.core.lesson_status">cmi.core.lesson_status</a>
+              <a href="javascript:void(0);" class="list-group-item" data-click="getValue" data-key="cmi.core.score.raw">cmi.core.score.raw</a>
+              <a href="javascript:void(0);" class="list-group-item" data-click="getValue" data-key="cmi.suspend_data">cmi.suspend_data</a>
+              <a href="javascript:void(0);" class="list-group-item" data-click="getAll">Get everything possible</a>
+              
+              <div class="list-group-item">
+                <form class="form-inline">
+                  <div class="form-group">
+                    Get <input type="text" class="form-control" id="get-custom-key">  
+                    <a class="btn btn-default" href="javascript:void(0);" data-click="getCustomValue">Send</a>
+                  </div>
+                </form>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
