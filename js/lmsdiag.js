@@ -15,6 +15,7 @@ var LMSDiag = (function($)
     'cmi.core',
     'cmi.objectives',
     'cmi.suspend_data',
+    'cmi.student_data',
     'cmi.student_preference',
     'cmi.interactions'
   ];
@@ -35,7 +36,8 @@ var LMSDiag = (function($)
 
   var _writeOnly = [
     'cmi.core.exit',
-    'cmi.core.session_time'
+    'cmi.core.session_time',
+    'cmi.interactions'
   ];
 
   var apiData = {};
@@ -58,7 +60,7 @@ var LMSDiag = (function($)
 
   LMSDiag.prototype = { 
 
-    initialize: function(key,val,e)
+    initialize: function()
     {
       var success = doLMSInitialize();
       if(success === "true")
@@ -69,13 +71,13 @@ var LMSDiag = (function($)
       }
     },
 
-    terminate: function(key,val,e)
+    terminate: function()
     {
       this.terminated = true;
       doLMSFinish();
     },
 
-    commit: function(key,val,e)
+    commit: function()
     {
       doLMSCommit();
     },
@@ -85,7 +87,7 @@ var LMSDiag = (function($)
       doLMSSetValue(key,val.toString());
     },
 
-    getValue: function(key,val,e)
+    getValue: function(key)
     {
       doLMSGetValue(key);
     },
@@ -142,7 +144,7 @@ var LMSDiag = (function($)
     {
       var self = this;
       var timestamp = this.getElapsedTime();
-      $('#elapsedTime').html(timestamp);
+      $("#elapsedTime").html(timestamp);
       var func=function()
       {
         self.setElapsedTime();
@@ -150,24 +152,24 @@ var LMSDiag = (function($)
       setTimeout(function(){func();},1);
     },
 
-    setCustomValue: function(key,val,e)
+    setCustomValue: function()
     {
-      var k = $('#customElKey').val();
-      var v = $('#customElVal').val();
-      if(k == '' || v == '')
+      var k = $("#set-custom-key").val();
+      var v = $("#set-custom-value").val();
+      if(k == "" || v == "")
       {
-        this.log('You must enter a key and value before sending.','text-danger');
+        this.log("You must enter a key and value before sending.","text-warning");
         return;
       }
       this.setValue(k,v);
     },
 
-    getCustomValue: function(key,val,e)
+    getCustomValue: function()
     {
-      var k = $('#customElKey').val();
-      if(k == '')
+      var k = $("#get-custom-key").val();
+      if(k == "")
       {
-        this.log('You must enter a key before requesting.','text-danger');
+        this.log("You must enter a key before requesting.","text-warning");
         return;
       }
       this.getValue(k);
@@ -208,8 +210,6 @@ var LMSDiag = (function($)
       }
 
       this.commit();
-
-
     },
 
     getAll: function(key,val,e)
@@ -217,91 +217,98 @@ var LMSDiag = (function($)
       for(var i=0;i<_getters.length;i++)
       {
         var prop = _getters[i];
-        if($.inArray(prop, _hasChildren) < 0)
-        {
-          var result = doLMSGetValue(prop);
-          if(result)
-          {
-            apiData[prop] = result;
-          }
-        }
-        else
-        {
-          if($.inArray(prop, _hasCount) < 0)
-          {
-            var children = doLMSGetValue(prop+"._children");
-            this.getChildren(prop, children.split(","));
-          }
-          else
-          {
-            console.log(prop, "has count")
-          }
-        }
-
+        this.populate(prop);
       }
 
       console.log(apiData);
     },
 
-    getChildren: function(parent,children)
+    populate: function(prop)
     {
-      for(var i=0;i<children.length;i++)
+      if(this.inArray(prop, _hasChildren))
       {
-        var child = children[i];
-        var prop = parent+"."+child;
+        this.populateChildren(prop);
+      }
+      else
+      {
+        this.populateChild(prop);
+      }
+    },
 
-        if($.inArray(prop, _writeOnly) < 0)
+    populateChildren: function(parentProp)
+    {
+      var result = doLMSGetValue(parentProp+"._children");
+      var children = result.split(",");
+
+      if(this.inArray(parentProp, _hasCount))
+      {
+        var count = doLMSGetValue(parentProp+"._count");
+        if(!this.inArray(parentProp, _writeOnly))
         {
-          if($.inArray(prop, _hasChildren) < 0)
+          for(var i=0;i<parseInt(count);i++)
           {
-            var result = doLMSGetValue(prop);
-            if(result)
+            for(var j=0;j<children.length;j++)
             {
-              apiData[prop] = result;
-            }
-          }
-          else
-          {
-            if($.inArray(prop, _hasCount) < 0)
-            {
-              var children = doLMSGetValue(prop+"._children");
-              this.getChildren(prop, children.split(","));
-            }
-            else
-            {
-              console.log(prop, "has count")
+              var child = children[j];
+              var prop = [parentProp,i,child].join(".");
+              this.populate(prop);
             }
           }
         }        
+      }
+      else
+      {
+        for(var i=0;i<children.length;i++)
+        {
+          var child = children[i];
+          var prop = [parentProp,child].join(".");
+          this.populate(prop);
+        }
+      }      
+    },
+
+    populateChild: function(prop)
+    {
+      if(this.inArray(prop, _writeOnly)){return}
+
+      var result = doLMSGetValue(prop);
+      if(result)
+      {
+        apiData[prop] = result;
       }
     },
 
     clearConsole: function(val,e)
     {
-      $("#logs").empty();
+      $("#logs ul").empty();
     },
 
     getCurrentTime: function()
     {
       var timeFix=function(time)
       {
-        return (time<10) ? '0'+time : time;
+        return (time<10) ? "0"+time : time;
       };
       var d = new Date();
       var hrs = timeFix(d.getHours());
       var min = timeFix(d.getMinutes());
       var sec = timeFix(d.getSeconds());
-      return hrs+':'+min+':'+sec;
+      return [hrs,min,sec].join(":");
+    },
+
+    inArray(val, array)
+    {
+      return $.inArray(val, array) > -1;
     },
 
     log: function(msg,css)
     {
       $("<li />")
-        .addClass(css || 'text-success')
+        .addClass(css || "text-success")
         .html(this.getCurrentTime() + " " + msg)
         .appendTo($('#logs ul'));
 
-      $('#logs').scrollTop();
+      $("#logs").scrollTop();
     },
 
     closeWin: function(val,e)
@@ -314,7 +321,7 @@ var LMSDiag = (function($)
 
     toString: function()
     {
-      return 'LMSDiag: '+this.version;
+      return "LMSDiag: "+this.version;
     }
   };
 
