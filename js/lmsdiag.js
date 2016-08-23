@@ -8,36 +8,37 @@ var LMSDiag = (function($)
   "use strict"
 
   var _getters = [
-    'cmi.suspend_data',
-    'cmi.launch_data',
-    'cmi.comments',
-    'cmi.comments_from_lms',
-    'cmi.core',
-    'cmi.objectives',
-    'cmi.suspend_data',
-    'cmi.student_data',
-    'cmi.student_preference',
-    'cmi.interactions'
+    'suspend_data',
+    'launch_data',
+    'comments',
+    'comments_from_lms',
+    'core',
+    'objectives',
+    'suspend_data',
+    'student_data',
+    'student_preference',
+    'interactions'
   ];
 
   var _hasChildren = [
-    'cmi.core',
-    'cmi.core.score',
-    'cmi.objectives',
-    'cmi.student_data',
-    'cmi.student_preference',
-    'cmi.interactions'
+    'core',
+    'score',
+    'objectives',
+    'student_data',
+    'student_preference',
+    'interactions'
   ];
 
   var _hasCount = [
-    'cmi.objectives',
-    'cmi.interactions'
+    'objectives',
+    'interactions',
+    'correct_responses'
   ];
 
   var _writeOnly = [
-    'cmi.core.exit',
-    'cmi.core.session_time',
-    'cmi.interactions'
+    'exit',
+    'session_time',
+    'interactions'
   ];
 
   var apiData = {};
@@ -217,15 +218,14 @@ var LMSDiag = (function($)
       for(var i=0;i<_getters.length;i++)
       {
         var prop = _getters[i];
-        this.populate(prop);
+        this.populate("cmi." + prop);
       }
-
-      console.log(apiData);
     },
 
     populate: function(prop)
     {
-      if(this.inArray(prop, _hasChildren))
+      var youngest = this.getYoungest(prop);
+      if(this.inArray(youngest, _hasChildren))
       {
         this.populateChildren(prop);
       }
@@ -239,8 +239,8 @@ var LMSDiag = (function($)
     {
       var result = doLMSGetValue(parentProp+"._children");
       var children = result.split(",");
-
-      if(this.inArray(parentProp, _hasCount))
+      var youngest = this.getYoungest(parentProp);
+      if(this.inArray(youngest, _hasCount))
       {
         var count = doLMSGetValue(parentProp+"._count");
         if(!this.inArray(parentProp, _writeOnly))
@@ -269,13 +269,20 @@ var LMSDiag = (function($)
 
     populateChild: function(prop)
     {
-      if(this.inArray(prop, _writeOnly)){return}
+      var youngest = this.getYoungest(prop);
+      if(this.inArray(youngest, _writeOnly)){return}
 
       var result = doLMSGetValue(prop);
       if(result)
       {
         apiData[prop] = result;
       }
+    },
+
+    getYoungest: function(prop)
+    {
+      var arr = prop.split(".");
+      return arr[arr.length-1];
     },
 
     clearConsole: function(val,e)
