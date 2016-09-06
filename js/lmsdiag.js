@@ -251,6 +251,7 @@ var LMSDiag = (function($)
             {
               var child = children[j];
               var prop = [parentProp,i,child].join(".");
+              console.log(prop)
               this.populate(prop);
             }
           }
