@@ -40,43 +40,27 @@
 ** runtime communication between an LMS and executable content components.
 ** There are several other possible implementations.
 **
-** Usage: Executable course content can call the API Wrapper
-**      functions as follows:
-**
-**    javascript:
-**          var result = doLMSInitialize();
-**          if (result != true) 
-**          {
-**             // handle error
-**          }
-**
-**    authorware
-**          result := ReadURL("javascript:doLMSInitialize()", 100)
-**
 *******************************************************************************/
 
-var _Debug = true;  // set this to false to turn debugging off
-                     // and get rid of those annoying alert boxes.
+// Updated by Sean K. Friese for LMSDiag - https://github.com/skfriese/lms-diag
 
-// Define exception/error codes
-var _NoError = 0;
-var _GeneralException = 101;
-var _ServerBusy = 102;
-var _InvalidArgumentError = 201;
-var _ElementCannotHaveChildren = 202;
-var _ElementIsNotAnArray = 203;
-var _NotInitialized = 301;
-var _NotImplementedError = 401;
-var _InvalidSetValue = 402;
-var _ElementIsReadOnly = 403;
-var _ElementIsWriteOnly = 404;
-var _IncorrectDataType = 405;
+const _Debug = true;
 
+const _NoError = 0;
+const _GeneralException = 101;
+const _ServerBusy = 102;
+const _InvalidArgumentError = 201;
+const _ElementCannotHaveChildren = 202;
+const _ElementIsNotAnArray = 203;
+const _NotInitialized = 301;
+const _NotImplementedError = 401;
+const _InvalidSetValue = 402;
+const _ElementIsReadOnly = 403;
+const _ElementIsWriteOnly = 404;
+const _IncorrectDataType = 405;
 
-// local variable definitions
-var apiHandle = null;
-var API = null;
-var findAPITries = 0;
+let apiHandle = null;
+let findAPITries = 0;
 
 
 /*******************************************************************************
@@ -93,20 +77,25 @@ var findAPITries = 0;
 *******************************************************************************/
 function doLMSInitialize()
 {
-   var api = getAPIHandle();
+   const api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSInitialize was not successful.");
+      noAPI("doLMSInitialize");
       return "false";
    }
 
-   var result = api.LMSInitialize("");
+   const result = api.LMSInitialize("");
 
    if (result.toString() != "true")
    {
-      var err = ErrorHandler();
+      const err = ErrorHandler();
+      diag.log('doLMSInitialize was not successful: ' + err,'text-danger');
    }
-
+   else
+   {
+      diag.log('doLMSInitialize executed successfully');
+   }
+   
    return result.toString();
 }
 
@@ -124,22 +113,22 @@ function doLMSInitialize()
 *******************************************************************************/
 function doLMSFinish()
 {
-   var api = getAPIHandle();
+   const api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSFinish was not successful.");
+      noAPI("doLMSFinish");
       return "false";
+   }
+
+   const result = api.LMSFinish("");
+   if (result.toString() != "true")
+   {
+      const err = ErrorHandler();
+      diag.log('doLMSFinish was not successful: ' + err,'text-danger');
    }
    else
    {
-      // call the LMSFinish function that should be implemented by the API
-
-      var result = api.LMSFinish("");
-      if (result.toString() != "true")
-      {
-         var err = ErrorHandler();
-      }
-
+      diag.log('doLMSFinish executed successfully');
    }
 
    return result.toString();
@@ -160,29 +149,24 @@ function doLMSFinish()
 *******************************************************************************/
 function doLMSGetValue(name)
 {
-   var api = getAPIHandle();
+   const api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSGetValue was not successful.");
+      noAPI("doLMSGetValue");
       return "";
    }
-   else
+
+   const value = api.LMSGetValue(name);
+   const errCode = api.LMSGetLastError().toString();
+   if (errCode != _NoError)
    {
-      var value = api.LMSGetValue(name);
-      var errCode = api.LMSGetLastError().toString();
-      if (errCode != _NoError)
-      {
-         // an error was encountered so display the error description
-         var errDescription = api.LMSGetErrorString(errCode);
-         log("LMSGetValue("+name+") failed. \n"+ errDescription);
-         return "";
-      }
-      else
-      {
-         
-         return value.toString();
-      }
+      const errDescription = api.LMSGetErrorString(errCode);
+      diag.log("doLMSGetValue("+name+") failed.  "+ errDescription,'text-danger');
+      return "";
    }
+
+   diag.log('doLMSGetValue: '+name+' executed successfully (Received &quot;'+value+'&quot;)');
+   return value.toString();
 }
 
 /*******************************************************************************
@@ -199,19 +183,22 @@ function doLMSGetValue(name)
 *******************************************************************************/
 function doLMSSetValue(name, value)
 {
-   var api = getAPIHandle();
+   const api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSSetValue was not successful.");
+      noAPI("doLMSSetValue");
       return;
+   }
+
+   const result = api.LMSSetValue(name, value);
+   if (result.toString() != "true")
+   {
+      const err = ErrorHandler();
+      diag.log('doLMSSetValue: '+name+' was not successful: ' + err,'text-danger');
    }
    else
    {
-      var result = api.LMSSetValue(name, value);
-      if (result.toString() != "true")
-      {
-         var err = ErrorHandler();
-      }
+      diag.log('doLMSSetValue: '+name+' executed successfully (Sent &quot;'+value+'&quot;)');
    }
 
    return result.toString();
@@ -229,19 +216,22 @@ function doLMSSetValue(name, value)
 *******************************************************************************/
 function doLMSCommit()
 {
-   var api = getAPIHandle();
+   const api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSCommit was not successful.");
+      noAPI("doLMSCommit");
       return "false";
+   }
+
+   const result = api.LMSCommit("");
+   if (result != "true")
+   {
+      const err = ErrorHandler();
+      diag.log('doLMSCommit was not successful: ' + err,'text-danger');
    }
    else
    {
-      var result = api.LMSCommit("");
-      if (result != "true")
-      {
-         var err = ErrorHandler();
-      }
+      diag.log('doLMSCommit executed successfully');
    }
 
    return result.toString();
@@ -259,12 +249,11 @@ function doLMSCommit()
 *******************************************************************************/
 function doLMSGetLastError()
 {
-   var api = getAPIHandle();
+   const api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSGetLastError was not successful.");
-      //since we can't get the error code from the LMS, return a general error
-      return _GeneralError;
+      noAPI("doLMSGetLastError");
+      return _GeneralException;
    }
 
    return api.LMSGetLastError().toString();
@@ -282,10 +271,10 @@ function doLMSGetLastError()
 ********************************************************************************/
 function doLMSGetErrorString(errorCode)
 {
-   var api = getAPIHandle();
+   const api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSGetErrorString was not successful.");
+      noAPI("doLMSGetErrorString");
    }
 
    return api.LMSGetErrorString(errorCode).toString();
@@ -304,10 +293,10 @@ function doLMSGetErrorString(errorCode)
 *******************************************************************************/
 function doLMSGetDiagnostic(errorCode)
 {
-   var api = getAPIHandle();
+   const api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSGetDiagnostic was not successful.");
+      noAPI("doLMSGetDiagnostic");
    }
 
    return api.LMSGetDiagnostic(errorCode).toString();
@@ -325,29 +314,16 @@ function doLMSGetDiagnostic(errorCode)
 *******************************************************************************/
 function LMSIsInitialized()
 {
-   // there is no direct method for determining if the LMS API is initialized
-   // for example an LMSIsInitialized function defined on the API so we'll try
-   // a simple LMSGetValue and trap for the LMS Not Initialized Error
-
-   var api = getAPIHandle();
+   const api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nLMSIsInitialized() failed.");
+      noAPI("LMSIsInitialized");
       return false;
    }
-   else
-   {
-      var value = api.LMSGetValue("cmi.core.student_name");
-      var errCode = api.LMSGetLastError().toString();
-      if (errCode == _NotInitialized)
-      {
-         return false;
-      }
-      else
-      {
-         return true;
-      }
-   }
+
+   api.LMSGetValue("cmi.core.student_name");
+   const errCode = api.LMSGetLastError().toString();
+   return errCode != _NotInitialized;
 }
 
 /*******************************************************************************
@@ -364,29 +340,25 @@ function LMSIsInitialized()
 *******************************************************************************/
 function ErrorHandler()
 {
-   var api = getAPIHandle();
+   const api = getAPIHandle();
    if (api == null)
    {
-      log("Unable to locate the LMS's API Implementation.\nCannot determine LMS error code.");
+      noAPI("ErrorHandler");
       return;
    }
 
-   // check for errors caused by or from the LMS
-   var errCode = api.LMSGetLastError().toString();
+   const errCode = api.LMSGetLastError().toString();
    if (errCode != _NoError)
    {
-      // an error was encountered so display the error description
-      var errDescription = api.LMSGetErrorString(errCode);
+      let errDescription = api.LMSGetErrorString(errCode);
 
-      if (_Debug == true)
+      if (_Debug === true)
       {
          errDescription += "\n";
          errDescription += api.LMSGetDiagnostic(null);
-         // by passing null to LMSGetDiagnostic, we get any available diagnostics
-         // on the previous error.
       }
 
-      log(errDescription);
+      diag.log(errDescription,'text-danger');
    }
 
    return errCode;
@@ -429,15 +401,13 @@ function findAPI(win)
    while ((win.API == null) && (win.parent != null) && (win.parent != win))
    {
       findAPITries++;
-      // Note: 7 is an arbitrary number, but should be more than sufficient
       if (findAPITries > 7) 
       {
-         log("Error finding API -- too deeply nested.");
+         diag.log("Error finding API -- too deeply nested.",'text-danger');
          return null;
       }
       
       win = win.parent;
-
    }
    return win.API;
 }
@@ -458,16 +428,19 @@ function findAPI(win)
 *******************************************************************************/
 function getAPI()
 {
-   var theAPI = findAPI(window);
+   let theAPI = findAPI(window);
    if ((theAPI == null) && (window.opener != null) && (typeof(window.opener) != "undefined"))
    {
       theAPI = findAPI(window.opener);
    }
    if (theAPI == null)
    {
-      log("Unable to find an API adapter");
+      diag.log("Unable to find an API adapter",'text-danger');
    }
-   return theAPI
+   return theAPI;
 }
 
-
+function noAPI(func)
+{
+   diag.log("Unable to locate the LMS's API Implementation. " + func,'text-danger');
+}

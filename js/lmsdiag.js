@@ -1,201 +1,262 @@
-
 /**
  * LMSDiag Class
- * @Developer Sean K. Friese (sean.friese@ancile.com)
+ * @Developer Sean K. Friese (skfriese@gmail.com)
  */
 
-(function()
-{
-	/**
-	 * Constructor - initiate with the new operator
-	 * @param {Object} logFunc Function for sending log messages
-	 */
-	this.LMSDiag = function(logFunc)
-	{
-		this.startTime = '';
-		this.version = 'v1.1_20110816';
-		this.log = logFunc;
-		this.log('Instance of LMS Diagnostic class created ('+this.version+')');
-		this.initialize();
-	};
+const GETTERS = [
+  'suspend_data',
+  'launch_data',
+  'comments',
+  'comments_from_lms',
+  'core',
+  'objectives',
+  'student_data',
+  'student_preference',
+  'interactions'
+];
 
-	LMSDiag.prototype = { 
+const HAS_CHILDREN = new Set([
+  'core',
+  'score',
+  'objectives',
+  'student_data',
+  'student_preference',
+  'interactions'
+]);
 
-		initialize: function()
-		{
-			this.log('Calling doLMSInitialize...');
-			var success = doLMSInitialize();
-			if(success === "true")
-			{
-				// Store initial startTime in centiseconds
-				this.startTime = Math.round((new Date()).getTime() / 10);
-				this.log('doLMSInitialize executed successfully');
-			}
-			else
-			{
-				this.log('doLMSInitialize was not successful');
-			}
-		},
+const HAS_COUNT = new Set([
+  'objectives',
+  'interactions',
+  'correct_responses'
+]);
 
-		terminate: function()
-		{
-			this.log('Calling doLMSFinish...');
-			var success = doLMSFinish();
-			if(success === "true")
-			{
-				this.log('doLMSFinish executed successfully');
-			}
-			else
-			{
-				this.log('doLMSFinish was not successful');
-			}
-		},
+const WRITE_ONLY = new Set([
+  'exit',
+  'session_time',
+  'interactions'
+]);
 
-		commit: function()
-		{
-			var success = doLMSCommit();
-			if(success === "true")
-			{
-				this.log('doLMSCommit executed successfully');
-			}
-			else
-			{
-				this.log('doLMSCommit was not successful');
-			}
-		},
-		
-		setLocation: function(lesson_location)
-		{
-			var success = doLMSSetValue('cmi.core.lesson_location', lesson_location);
+class LMSDiag {
 
-			if(success === "true")
-			{
-				this.log('doLMSSetValue: cmi.core.lesson_location executed successfully ('+lesson_location+')');
-			}
-			else
-			{
-				this.log('doLMSSetValue: cmi.core.lesson_location was not successful');
-			}
-		},
+  terminated = false;
+  initialized = false;
+  startTime = '';
+  initSeconds = 20;
+  version = 'v3.0';
+  apiData = {};
 
-		getLocation: function()
-		{
-			var result = doLMSGetValue('cmi.core.lesson_location');
-			this.log('getLocation='+result);
-			return result;
-		},
+  constructor() {
+    this.log(`Instance of LMS Diagnostic class created (${this.version})`);
+    this.populateMacros();
+    this.setElapsedTime();
+    this.setInitSeconds();
+  }
 
-		setStatus: function(lesson_status)
-		{
-			var success = doLMSSetValue('cmi.core.lesson_status', lesson_status);
-			if(success === "true")
-			{
-				this.log('doLMSSetValue: cmi.core.lesson_status executed successfully ('+lesson_status+')');
-			}
-			else
-			{
-				this.log('doLMSSetValue: cmi.core.lesson_status was not successful');
-			}
-		},
+  initialize() {
+    const success = doLMSInitialize();
+    if (success === "true") {
+      this.startTime = Math.round(Date.now() / 10);
+      this.initialized = true;
+    }
+  }
 
-		getStatus: function()
-		{
-			var result = doLMSGetValue('cmi.core.lesson_status');
-			this.log('getStatus='+result);
-			return result;
-		},
+  terminate() {
+    this.terminated = true;
+    doLMSFinish();
+  }
 
-		setScore: function(score)
-		{
-			var minResult = doLMSSetValue('cmi.core.score.min', '0');
-			var maxResult = doLMSSetValue('cmi.core.score.max', '100');
-			
-			var success = doLMSSetValue('cmi.core.score.raw', score);
+  commit() {
+    doLMSCommit();
+  }
 
-			if(success === "true")
-			{
-				this.log('doLMSSetValue: cmi.core.score.raw executed successfully ('+score+')');
-			}
-			else
-			{
-				this.log('doLMSSetValue: cmi.core.score.raw was not successful');
-			}
-		},
+  setValue(key, val) {
+    doLMSSetValue(key, val.toString());
+  }
 
-		getScore: function()
-		{
-			var result = doLMSGetValue('cmi.core.score.raw');
-			this.log('getScore='+result);
-			return result;
-		},
+  getValue(key) {
+    doLMSGetValue(key);
+  }
 
-		setSuspendData: function(suspend_data)
-		{
-			var success = doLMSSetValue('cmi.suspend_data', escape(suspend_data));
-			if(success === "true")
-			{
-				this.log('doLMSSetValue: cmi.suspend_data executed successfully ('+escape(suspend_data)+')');
-			}
-			else
-			{
-				this.log('doLMSSetValue: cmi.suspend_data was not successful');
-			}
-		},
-		
-		getSuspendData: function()
-		{
-			var result = unescape(doLMSGetValue('cmi.suspend_data'));
-			this.log('getSuspendData='+result);
-			return result;
-		},
+  setSessionTime() {
+    doLMSSetValue('cmi.core.session_time', this.getElapsedTime());
+  }
 
-		setValue: function(field,data)
-		{
-			var success = doLMSSetValue(field,data);
-			
-			if(success === "true")
-			{
-				this.log('doLMSSetValue: '+field+' executed successfully ('+data+')');
-			}
-			else
-			{
-				this.log('doLMSSetValue: '+field+' was not successful');
-			}
-		},
+  setInitSeconds() {
+    if (this.initialized) {
+      const warning = document.getElementById('init-warning');
+      if (warning) warning.remove();
+      return;
+    }
 
-		setSessionTime: function()
-		{
-			var timeStamp = this.getElapsedTime();
+    this.initSeconds--;
 
-			var success = doLMSSetValue('cmi.core.session_time', timeStamp);
-			if(success === "true")
-			{
-				this.log('doLMSSetValue: cmi.core.session_time executed successfully ('+timeStamp+')');
-			}
-			else
-			{
-				this.log('doLMSSetValue: cmi.core.session_time was not successful');
-			}
-		},
+    const secondsEl = document.getElementById('init-seconds');
+    if (secondsEl) secondsEl.textContent = this.initSeconds;
 
-		getElapsedTime: function()
-		{
-			if(this.startTime != 0)
-			{
-				var curTime = Math.round((new Date()).getTime() / 10);
-				var duration = curTime - this.startTime;
-				var timeStamp = centisecsToSCORM12Duration(duration);
-			}
-			else
-			{
-				var timeStamp = "00:00:00.0";
-			}
-			return timeStamp;
-		},
+    if (this.initSeconds < 1) {
+      const warning = document.getElementById('init-warning');
+      if (warning) warning.classList.add('alert-danger');
+      this.log('LMSInitialize was not called within 20 seconds', 'text-danger');
+    } else {
+      setTimeout(() => this.setInitSeconds(), 1000);
+    }
+  }
 
-		toString: function()
-		{
-			return 'LMSDiag: '+this.version;
-		}
-	};
-})();
+  getElapsedTime() {
+    if (this.startTime) {
+      const curTime = Math.round(Date.now() / 10);
+      const duration = curTime - this.startTime;
+      return centisecsToSCORM12Duration(duration);
+    }
+    return "00:00:00.0";
+  }
+
+  setElapsedTime() {
+    const el = document.getElementById('elapsedTime');
+    if (el) el.textContent = this.getElapsedTime();
+    setTimeout(() => this.setElapsedTime(), 1);
+  }
+
+  setCustomValue() {
+    const k = document.getElementById('set-custom-key')?.value;
+    const v = document.getElementById('set-custom-value')?.value;
+    if (k === "" || v === "") {
+      this.log("You must enter a key and value before sending.", "text-warning");
+      return;
+    }
+    this.setValue(k, v);
+  }
+
+  getCustomValue() {
+    const k = document.getElementById('get-custom-key')?.value;
+    if (k === "") {
+      this.log("You must enter a key before requesting.", "text-warning");
+      return;
+    }
+    this.getValue(k);
+  }
+
+  populateMacros() {
+    if (typeof LMSDiagMacros === 'undefined' || !LMSDiagMacros) return;
+
+    const select = document.getElementById('macros');
+    if (!select) return;
+
+    LMSDiagMacros.forEach((macro, i) => {
+      const option = document.createElement('option');
+      option.textContent = `${i}: ${macro.label}`;
+      option.value = i;
+      select.appendChild(option);
+    });
+  }
+
+  runMacro() {
+    const select = document.getElementById('macros');
+    if (!select || select.selectedIndex < 0) return;
+
+    const macro = LMSDiagMacros[select.selectedIndex];
+    if (!macro?.steps?.length) return;
+
+    for (const step of macro.steps) {
+      switch (step.type) {
+        case "get":
+          this.getValue(step.key);
+          break;
+        case "set": {
+          const val = (typeof step.val === "function") ? step.val() : step.val;
+          this.setValue(step.key, val);
+          break;
+        }
+      }
+    }
+
+    this.commit();
+  }
+
+  getAll() {
+    for (const getter of GETTERS) {
+      this.populate(`cmi.${getter}`);
+    }
+  }
+
+  populate(prop) {
+    const youngest = this.getYoungest(prop);
+    if (HAS_CHILDREN.has(youngest)) {
+      this.populateChildren(prop);
+    } else {
+      this.populateChild(prop);
+    }
+  }
+
+  populateChildren(parentProp) {
+    const result = doLMSGetValue(`${parentProp}._children`);
+    const children = result.split(",");
+    const youngest = this.getYoungest(parentProp);
+
+    if (HAS_COUNT.has(youngest)) {
+      const count = doLMSGetValue(`${parentProp}._count`);
+      if (!WRITE_ONLY.has(parentProp)) {
+        for (let i = 0; i < Number.parseInt(count); i++) {
+          for (const child of children) {
+            const prop = [parentProp, i, child].join(".");
+            console.log(prop);
+            this.populate(prop);
+          }
+        }
+      }
+    } else {
+      for (const child of children) {
+        const prop = [parentProp, child].join(".");
+        this.populate(prop);
+      }
+    }
+  }
+
+  populateChild(prop) {
+    const youngest = this.getYoungest(prop);
+    if (WRITE_ONLY.has(youngest)) return;
+
+    const result = doLMSGetValue(prop);
+    if (result) {
+      this.apiData[prop] = result;
+    }
+  }
+
+  getYoungest(prop) {
+    const parts = prop.split(".");
+    return parts[parts.length - 1];
+  }
+
+  clearConsole() {
+    const logList = document.querySelector('#logs ul');
+    if (logList) logList.innerHTML = '';
+  }
+
+  getCurrentTime() {
+    const pad = (n) => (n < 10) ? `0${n}` : n;
+    const d = new Date();
+    return [pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds())].join(":");
+  }
+
+  log(msg, css) {
+    const li = document.createElement('li');
+    li.className = css || 'text-success';
+    li.innerHTML = `${this.getCurrentTime()} ${msg}`;
+    const logList = document.querySelector('#logs ul');
+    if (logList) {
+      logList.appendChild(li);
+      const logs = document.getElementById('logs');
+      if (logs) logs.scrollTop = logs.scrollHeight;
+    }
+  }
+
+  closeWin() {
+    if (top === parent) {
+      top.close();
+    }
+  }
+
+  toString() {
+    return `LMSDiag: ${this.version}`;
+  }
+}
