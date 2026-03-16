@@ -14,10 +14,10 @@
     <h1>SCORM 1.2 LMS Diagnostic SCO</h1>
 
     <div class="actions">
-      <a class="btn btn-success" role="button" href="javascript:void(0);" data-click="initialize">LMSInitialize</a>
-      <a class="btn btn-primary" role="button" href="javascript:void(0);" data-click="commit">LMSCommit</a>
-      <a class="btn btn-warning" role="button" href="javascript:void(0);" data-click="terminate">LMSFinish</a>
-      <a class="btn btn-danger" role="button" href="javascript:void(0);" data-click="closeWin"><b class="fa fa-times"></b> Close SCO Window</a>
+      <button type="button" class="btn btn-success" data-click="initialize">LMSInitialize</button>
+      <button type="button" class="btn btn-primary" data-click="commit">LMSCommit</button>
+      <button type="button" class="btn btn-warning" data-click="terminate">LMSFinish</button>
+      <button type="button" class="btn btn-danger" data-click="closeWin"><b class="fa fa-times"></b> Close SCO Window</button>
     </div>
 
     <div id="init-warning" class="alert alert-warning" role="alert">LMSInitialize has not been called. The SCO must be initialized before anything else. You have <span id="init-seconds"></span> seconds remaining.</div>
@@ -43,33 +43,33 @@
             <div class="list-group">
               <div class="list-group-item">
                 cmi.core.lesson_location
-                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_location" data-val="page001">&quot;page_001&quot;</a>
+                <button type="button" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_location" data-val="page001">&quot;page_001&quot;</button>
               </div>
 
               <div class="list-group-item">
                 cmi.core.lesson_status
-                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="incomplete">&quot;incomplete&quot;</a>
-                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="completed">&quot;completed&quot;</a>
-                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="passed">&quot;passed&quot;</a>
-                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="failed">&quot;failed&quot;</a>
+                <button type="button" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="incomplete">&quot;incomplete&quot;</button>
+                <button type="button" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="completed">&quot;completed&quot;</button>
+                <button type="button" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="passed">&quot;passed&quot;</button>
+                <button type="button" class="btn btn-default" data-click="setValue" data-key="cmi.core.lesson_status" data-val="failed">&quot;failed&quot;</button>
               </div>
 
               <div class="list-group-item">
                 cmi.core.score.raw 
-                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="0">0</a>
-                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="25">25</a>
-                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="50">50</a>
-                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="75">75</a>
-                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="100">100</a>
+                <button type="button" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="0">0</button>
+                <button type="button" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="25">25</button>
+                <button type="button" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="50">50</button>
+                <button type="button" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="75">75</button>
+                <button type="button" class="btn btn-default" data-click="setValue" data-key="cmi.core.score.raw" data-val="100">100</button>
               </div>
 
               <div class="list-group-item">
                 cmi.core.session_time
-                <a href="javascript:void(0);" class="btn btn-default" data-click="setSessionTime">&quot;<span id="elapsedTime"></span>&quot;</a>
+                <button type="button" class="btn btn-default" data-click="setSessionTime">&quot;<span id="elapsedTime"></span>&quot;</button>
               </div>
               <div class="list-group-item">
                 cmi.suspend_data
-                <a href="javascript:void(0);" class="btn btn-default" data-click="setValue" data-key="cmi.suspend_data" data-val="someVar=1,anotherVar=2">&quot;someVar=1,anotherVar=2&quot;</a>
+                <button type="button" class="btn btn-default" data-click="setValue" data-key="cmi.suspend_data" data-val="someVar=1,anotherVar=2">&quot;someVar=1,anotherVar=2&quot;</button>
               </div>
 
               <div class="list-group-item">
@@ -77,7 +77,7 @@
                   <div class="form-group">
                     Set <input type="text" class="form-control" id="set-custom-key"> to 
                     <input type="text" class="form-control" id="set-custom-value"> 
-                    <a class="btn btn-default" href="javascript:void(0);" data-click="setCustomValue">Send</a>
+                    <button type="button" class="btn btn-default" data-click="setCustomValue">Send</button>
                   </div>
                 </form>
               </div>
@@ -90,17 +90,17 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <div class="list-group">
-              <a href="javascript:void(0);" class="list-group-item" data-click="getValue" data-key="cmi.core.lesson_location">cmi.core.lesson_location</a>
-              <a href="javascript:void(0);" class="list-group-item" data-click="getValue" data-key="cmi.core.lesson_status">cmi.core.lesson_status</a>
-              <a href="javascript:void(0);" class="list-group-item" data-click="getValue" data-key="cmi.core.score.raw">cmi.core.score.raw</a>
-              <a href="javascript:void(0);" class="list-group-item" data-click="getValue" data-key="cmi.suspend_data">cmi.suspend_data</a>
-              <a href="javascript:void(0);" class="list-group-item" data-click="getAll">Get everything possible</a>
+              <button type="button" class="list-group-item" data-click="getValue" data-key="cmi.core.lesson_location">cmi.core.lesson_location</button>
+              <button type="button" class="list-group-item" data-click="getValue" data-key="cmi.core.lesson_status">cmi.core.lesson_status</button>
+              <button type="button" class="list-group-item" data-click="getValue" data-key="cmi.core.score.raw">cmi.core.score.raw</button>
+              <button type="button" class="list-group-item" data-click="getValue" data-key="cmi.suspend_data">cmi.suspend_data</button>
+              <button type="button" class="list-group-item" data-click="getAll">Get everything possible</button>
               
               <div class="list-group-item">
                 <form class="form-inline">
                   <div class="form-group">
                     Get <input type="text" class="form-control" id="get-custom-key">  
-                    <a class="btn btn-default" href="javascript:void(0);" data-click="getCustomValue">Send</a>
+                    <button type="button" class="btn btn-default" data-click="getCustomValue">Send</button>
                   </div>
                 </form>
               </div>
@@ -116,7 +116,7 @@
               <div class="form-group">
                 <label for="macros">Macros</label>
                 <select id="macros" class="form-control" size="5"></select>
-                <a class="btn btn-default" href="javascript:void(0);" data-click="runMacro">Run</a>
+                <button type="button" class="btn btn-default" data-click="runMacro">Run</button>
               </div>
             </form>
           </div>
@@ -130,7 +130,7 @@
       </div>
       <div class="panel-body">
         <div class="btn-group actions" role="group">
-          <a  class="btn btn-danger" role="button" href="javascript:void(0);" data-click="clearConsole"><b class="fa fa-eraser"></b> Clear Logs</a>
+          <button type="button" class="btn btn-danger" data-click="clearConsole"><b class="fa fa-eraser"></b> Clear Logs</button>
         </div>
         <pre id="logs"><ul></ul></pre>
       </div>
